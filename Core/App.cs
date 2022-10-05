@@ -12,6 +12,7 @@ namespace Tontonator.Core
         public static void Init()
         {
             var opt = 0;
+
             while (opt != 2)
             {
                 Console.WriteLine("===== Bienvenido a tontonator =====");
@@ -34,7 +35,8 @@ namespace Tontonator.Core
 							switch (opt)
 							{
 								case 1:
-									// 
+									Tontonator tontonator = new Tontonator();
+									tontonator.Init();
 									break;
 								case 2:
 									Console.WriteLine("Saliendo...");
@@ -56,7 +58,6 @@ namespace Tontonator.Core
                         Console.Clear();
                         MessageHelper.WriteError("ERROR: Ingrese un valor valido");
                     }
-
                 }
                 else
                 {
@@ -66,6 +67,4 @@ namespace Tontonator.Core
             }
         }
     }
-
-
 }
