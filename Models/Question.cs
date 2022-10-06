@@ -15,11 +15,15 @@ namespace Tontonator.Models
 		public string QuestionCategory { get; set; }
 		public string[] QuestionOptions { get => new string[] { "Si", "No", "Probablemente", "Probablemente no", "No sé" }; }
 		public bool IsCorrect { get; set; }
+		public double QuestionRate { get; set; } 
 		public QuestionOption QuestionOption { get; set; }
+
 		public Question(string questionName, string questionCategory)
 		{
 			this.QuestionName = questionName;
 			this.QuestionCategory = questionCategory;
+			IsCorrect = false;
+			QuestionRate = 0;
 		}
 
 		public void ShowOptions()
@@ -72,6 +76,8 @@ namespace Tontonator.Models
 								MessageHelper.WriteError("ERROR: Ingrese un valor valido");
 								break;
 						}
+
+						QuestionRate = QuestionManager.EvaluateQuestion(this);
 					}
 					else
 					{

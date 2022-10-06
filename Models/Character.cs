@@ -10,6 +10,13 @@ namespace Tontonator.Models
 	{
 		public string CharacterName { get; set; }
 		public string CharacterCategory { get; set; }
+		public List<Question> QuestionPairs { get; set; }
 
+		public Character(string characterName, string characterCategory, List<Question> questionPairs)
+		{
+			CharacterName = characterName;
+			CharacterCategory = characterCategory;
+			QuestionPairs = questionPairs;
+		}
 	}
 }
