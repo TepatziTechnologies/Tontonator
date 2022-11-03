@@ -7,4 +7,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="FirebaseAdmin" />
+    <None Remove="FireSharp" />
+    <None Remove="Google.Cloud.Firestore" />
+    <None Remove="Core\Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Google.Cloud.Firestore" Version="3.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Core\Services\" />
+  </ItemGroup>
 </Project>

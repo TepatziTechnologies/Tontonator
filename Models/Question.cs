@@ -4,19 +4,26 @@ using System.Linq;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
+using Tontonator.Core.Data.BaseRepository;
 using Tontonator.Core.Helpers;
 using Tontonator.Models.Enums;
 
 namespace Tontonator.Models
 {
-	internal class Question : IQuestion
+	public class Question : IQuestion, IEntityBase
 	{
+		public string Id { get; set; }
 		public string QuestionName { get; set; }
 		public string QuestionCategory { get; set; }
 		public string[] QuestionOptions { get => new string[] { "Si", "No", "Probablemente", "Probablemente no", "No sé" }; }
 		public bool IsCorrect { get; set; }
 		public double QuestionRate { get; set; } 
 		public QuestionOption QuestionOption { get; set; }
+
+		public Question()
+        {
+			
+        }
 
 		public Question(string questionName, string questionCategory)
 		{
@@ -105,5 +112,14 @@ namespace Tontonator.Models
 				MessageHelper.WriteError("ERROR: El campo no puede estar vacio.");
 			}
 		}
-	}
+		public Dictionary<object, object> ToDictionary()
+		{
+			var dictionary = new Dictionary<object, object>();
+
+			dictionary.Add("Id", this.Id);
+			dictionary.Add("QuestionName", this.QuestionName);
+
+            return dictionary;
+        }
+    }
 }
