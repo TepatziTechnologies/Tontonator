@@ -22,8 +22,16 @@ namespace Tontonator.Models
 		{
 			this.QuestionName = questionName;
 			this.QuestionCategory = questionCategory;
-			IsCorrect = false;
-			QuestionRate = 0;
+			this.IsCorrect = false;
+			this.QuestionRate = 0;
+		}
+
+		public Question(string questionName, string questionCategory, QuestionOption questionOption, double questionRate)
+		{
+			this.QuestionName = questionName;
+			this.QuestionCategory = questionCategory;
+			this.QuestionOption = questionOption;
+			this.QuestionRate = questionRate;
 		}
 
 		public void ShowOptions()

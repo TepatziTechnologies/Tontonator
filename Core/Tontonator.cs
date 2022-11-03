@@ -37,17 +37,25 @@ namespace Tontonator.Core
 					question.ShowOptions();
 					var opt = Console.ReadLine();
 					question.EvaluateOption(opt);
+					ThinkOnCharacter(question);
 				}
+				
 			}
 
-			ThinkOnCharacter();
+			
 
 			Console.WriteLine(_average);
 		}
 
-		public void ThinkOnCharacter()
+		public void ThinkOnCharacter(Question currentQuestion)
 		{
 			UpdateAvg();
+
+			foreach (var question in _questions)
+			{
+				
+				Object.Equals("","");
+			}
 		}
 
 		private void UpdateAvg()
