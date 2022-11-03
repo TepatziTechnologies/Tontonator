@@ -8,6 +8,7 @@ namespace Tontonator.Models
 {
 	internal class Character
 	{
+		77
 		public string CharacterName { get; set; }
 		public string CharacterCategory { get; set; }
 		public List<Question> QuestionPairs { get; set; }
