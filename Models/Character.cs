@@ -21,9 +21,9 @@ namespace Tontonator.Models
 			QuestionPairs = questionPairs;
 		}
 
-		public Dictionary<object, object> ToDictionary()
+		public Dictionary<string, object> ToDictionary()
 		{
-			var dictionary = new Dictionary<object, object>();
+			var dictionary = new Dictionary<string, object>();
 
 			dictionary.Add("Id", this.Id);
 			dictionary.Add("CharacterName", this.CharacterName);

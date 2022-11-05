@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
+using Google.Cloud.Firestore;
 using Tontonator.Core.Data.BaseRepository;
 using Tontonator.Core.Helpers;
 using Tontonator.Models.Enums;
@@ -12,7 +13,9 @@ namespace Tontonator.Models
 {
 	public class Question : IQuestion, IEntityBase
 	{
+        [FirestoreProperty]
 		public string Id { get; set; }
+        [FirestoreProperty]
 		public string QuestionName { get; set; }
 		public string QuestionCategory { get; set; }
 		public string[] QuestionOptions { get => new string[] { "Si", "No", "Probablemente", "Probablemente no", "No sé" }; }
@@ -112,12 +115,15 @@ namespace Tontonator.Models
 				MessageHelper.WriteError("ERROR: El campo no puede estar vacio.");
 			}
 		}
-		public Dictionary<object, object> ToDictionary()
+
+		public Dictionary<string, object> ToDictionary()
 		{
-			var dictionary = new Dictionary<object, object>();
+			var dictionary = new Dictionary<string, object>();
 
 			dictionary.Add("Id", this.Id);
 			dictionary.Add("QuestionName", this.QuestionName);
+			dictionary.Add("", this.QuestionCategory);
+			dictionary.Add("", this.IsCorrect);
 
             return dictionary;
         }

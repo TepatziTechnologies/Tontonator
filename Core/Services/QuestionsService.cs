@@ -4,7 +4,7 @@ using Tontonator.Models;
 
 namespace Tontonator.Core.Services
 {
-    public class QuestionsService : BaseRepository<Question>
+    public class QuestionsService : EntityBaseRepository<Question>
     {
         public QuestionsService() : base("questions")
         {

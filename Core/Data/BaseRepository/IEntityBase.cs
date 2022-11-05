@@ -8,7 +8,7 @@ namespace Tontonator.Core.Data.BaseRepository
         /// </summary>
         string Id { get; set; }
 
-        Dictionary<object, object> ToDictionary();
+        Dictionary<string, object> ToDictionary();
     }
 }
 

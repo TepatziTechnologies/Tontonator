@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tontonator.Core.Data;
+using Tontonator.Core.Services;
 using Tontonator.Models;
 
 namespace Tontonator.Core
@@ -25,7 +26,12 @@ namespace Tontonator.Core
 
 		public void Init()
 		{
-			var counter = 0;
+            // Testing db connection.
+
+            QuestionsService questions = new QuestionsService();
+            questions.Add(_questions[0]);
+
+            var counter = 0;
 			foreach (var question in _questions)
 			{
 				counter++;

@@ -12,11 +12,19 @@
     <None Remove="FireSharp" />
     <None Remove="Google.Cloud.Firestore" />
     <None Remove="Core\Services\" />
+    <None Remove="tontonatoruaq-firebase-adminsdk-oww74-029b8e3492.json" />
+    <None Remove="Newtonsoft.Json" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Google.Cloud.Firestore" Version="3.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="tontonatoruaq-firebase-adminsdk-oww74-029b8e3492.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
