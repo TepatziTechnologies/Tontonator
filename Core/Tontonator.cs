@@ -26,10 +26,11 @@ namespace Tontonator.Core
 
 		public void Init()
 		{
+
             // Testing db connection.
 
-            QuestionsService questions = new QuestionsService();
-            questions.Add(_questions[0]);
+            // QuestionsService questions = new QuestionsService();
+            // questions.Add(_questions[0]);
 
             var counter = 0;
 			foreach (var question in _questions)
@@ -45,10 +46,7 @@ namespace Tontonator.Core
 					question.EvaluateOption(opt);
 					ThinkOnCharacter(question);
 				}
-				
 			}
-
-			
 
 			Console.WriteLine(_average);
 		}

@@ -122,8 +122,7 @@ namespace Tontonator.Models
 
 			dictionary.Add("Id", this.Id);
 			dictionary.Add("QuestionName", this.QuestionName);
-			dictionary.Add("", this.QuestionCategory);
-			dictionary.Add("", this.IsCorrect);
+			dictionary.Add("QuestionCategory", this.QuestionCategory);
 
             return dictionary;
         }

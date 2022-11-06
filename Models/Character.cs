@@ -12,13 +12,13 @@ namespace Tontonator.Models
 		public string Id { get; set; }
 		public string CharacterName { get; set; }
 		public string CharacterCategory { get; set; }
-		public List<Question> QuestionPairs { get; set; }
+		public List<Question> Questions { get; set; }
 
-		public Character(string characterName, string characterCategory, List<Question> questionPairs)
+		public Character(string characterName, string characterCategory, List<Question> questions)
 		{
 			CharacterName = characterName;
 			CharacterCategory = characterCategory;
-			QuestionPairs = questionPairs;
+			Questions = questions;
 		}
 
 		public Dictionary<string, object> ToDictionary()
@@ -28,6 +28,7 @@ namespace Tontonator.Models
 			dictionary.Add("Id", this.Id);
 			dictionary.Add("CharacterName", this.CharacterName);
 			dictionary.Add("CharacterCategory", this.CharacterCategory);
+			dictionary.Add("Questions", this.Questions);
 
 			return dictionary;
         }
