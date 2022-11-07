@@ -7,12 +7,17 @@ using Tontonator.Core.Data.BaseRepository;
 
 namespace Tontonator.Models
 {
-	internal class Character : IEntityBase
+	public class Character : IEntityBase
 	{
 		public string Id { get; set; }
 		public string CharacterName { get; set; }
 		public string CharacterCategory { get; set; }
 		public List<Question> Questions { get; set; }
+
+        public Character()
+        {
+
+        }
 
 		public Character(string characterName, string characterCategory, List<Question> questions)
 		{
@@ -28,7 +33,6 @@ namespace Tontonator.Models
 			dictionary.Add("Id", this.Id);
 			dictionary.Add("CharacterName", this.CharacterName);
 			dictionary.Add("CharacterCategory", this.CharacterCategory);
-			dictionary.Add("Questions", this.Questions);
 
 			return dictionary;
         }

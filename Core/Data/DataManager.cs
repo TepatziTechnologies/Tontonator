@@ -13,14 +13,7 @@ namespace Tontonator.Core.Data
 	{
 		private static QuestionsService _questionsService = new QuestionsService();
 
-		public static List<Question> GetBasicQuestions()
-		{
-			var questions = new List<Question>();
-
-			_questionsService.Read(nameof(Question.QuestionCategory), nameof(QuestionCategory.Basic));
-
-
-			return questions;
-		}
+		public static List<Question> GetBasicQuestions() => _questionsService.ReadAll(nameof(Question.QuestionCategory), nameof(QuestionCategory.Basic));
+		
 	}
 }

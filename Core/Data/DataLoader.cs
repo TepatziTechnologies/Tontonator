@@ -37,7 +37,8 @@ namespace Tontonator.Core.Data
 		public static void FeedDatabaseCharacters()
 		{
 			InitCharacters();
-
+			var db = new CharactersService();
+			foreach (var character in characters) db.AddCharacter(character);
 		}
 
 		public static List<Question> GetQuestions()

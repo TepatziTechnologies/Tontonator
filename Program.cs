@@ -8,11 +8,13 @@ namespace Tontonator
 	{
 		static void Main(string[] args)
 		{
-			App.Init();
+            // Feed first time database.
 
-			// Feed first time database.
+            //DataLoader.FeedDatabaseQuestions();
+            DataLoader.FeedDatabaseCharacters();
+            App.Init();
 
-			//DataLoader.FeedDatabaseQuestions();
+			
 		}
 	}
 }

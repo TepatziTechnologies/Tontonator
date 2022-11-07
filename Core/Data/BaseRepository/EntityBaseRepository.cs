@@ -2,13 +2,14 @@
 using System.Collections;
 using Google.Cloud.Firestore;
 using Newtonsoft.Json;
+using Tontonator.Models;
 
 namespace Tontonator.Core.Data.BaseRepository
 {
     public class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : class, IEntityBase, new()
     {
-        private FirestoreDb _firestoreDb;
-        private string collection;
+        protected FirestoreDb _firestoreDb;
+        protected string collection;
         private string filepath = "tontonatoruaq-firebase-adminsdk-oww74-029b8e3492.json";
 
         public EntityBaseRepository(string collectionName)
@@ -51,6 +52,28 @@ namespace Tontonator.Core.Data.BaseRepository
             }
 
             return entity;
+        }
+
+        public List<T> ReadAll(string field, string queryValue)
+        {
+            List<T> values = new List<T>();
+            T? entity = new T();
+
+            CollectionReference parentCollection = _firestoreDb.Collection(this.collection);
+            Query query = parentCollection.WhereEqualTo(field, queryValue);
+
+            foreach (var data in query.GetSnapshotAsync().GetAwaiter().GetResult())
+            {
+                if (data.Exists)
+                {
+                    var dictionary = data.ToDictionary();
+                    var jsonString = JsonConvert.SerializeObject(dictionary);
+                    entity = JsonConvert.DeserializeObject<T>(jsonString);
+                    if (entity != null) values.Add(entity);
+                }
+            }
+
+            return values;
         }
 
         public Task Update(T entity)

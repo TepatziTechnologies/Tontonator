@@ -18,7 +18,7 @@ namespace Tontonator.Core
 
 		public Tontonator()
 		{
-			_questions = DataLoader.GetQuestions();
+			_questions = DataManager.GetBasicQuestions();
 			_possibleCharacters = new List<Character>();
 			_nextPossibleCharacters = new List<Character>();
 			_average = 0d;
@@ -26,7 +26,6 @@ namespace Tontonator.Core
 
 		public void Init()
 		{
-
             // Testing db connection.
 
             // QuestionsService questions = new QuestionsService();

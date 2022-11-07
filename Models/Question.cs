@@ -20,7 +20,7 @@ namespace Tontonator.Models
 		public string QuestionCategory { get; set; }
 		public string[] QuestionOptions { get => new string[] { "Si", "No", "Probablemente", "Probablemente no", "No sé" }; }
 		public bool IsCorrect { get; set; }
-		public double QuestionRate { get; set; } 
+		public double QuestionRate { get; set; }
 		public QuestionOption QuestionOption { get; set; }
 
 		public Question()
@@ -123,6 +123,19 @@ namespace Tontonator.Models
 			dictionary.Add("Id", this.Id);
 			dictionary.Add("QuestionName", this.QuestionName);
 			dictionary.Add("QuestionCategory", this.QuestionCategory);
+
+            return dictionary;
+        }
+
+		public Dictionary<string, object> ToDictionaryComplete()
+        {
+            var dictionary = new Dictionary<string, object>();
+
+            dictionary.Add("Id", this.Id);
+            dictionary.Add("QuestionName", this.QuestionName);
+            dictionary.Add("QuestionCategory", this.QuestionCategory);
+			dictionary.Add("QuestionRate", this.QuestionRate);
+			dictionary.Add("QuestionOption", this.QuestionOption);
 
             return dictionary;
         }
