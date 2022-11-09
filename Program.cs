@@ -11,7 +11,7 @@ namespace Tontonator
             // Feed first time database.
 
             //DataLoader.FeedDatabaseQuestions();
-            DataLoader.FeedDatabaseCharacters();
+            //DataLoader.FeedDatabaseCharacters();
             App.Init();
 
 			

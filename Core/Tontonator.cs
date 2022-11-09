@@ -11,41 +11,36 @@ namespace Tontonator.Core
 {
 	public class Tontonator
 	{
-		private List<Question> _questions;
+		public List<Question> questions;
 		private double _average;
 		private List<Character> _possibleCharacters;
 		private List<Character> _nextPossibleCharacters;
 
-		public Tontonator()
+        private readonly static Tontonator _instance = new Tontonator();
+
+        private Tontonator()
 		{
-			_questions = DataManager.GetBasicQuestions();
+			questions = DataManager.GetBasicQuestions();
 			_possibleCharacters = new List<Character>();
 			_nextPossibleCharacters = new List<Character>();
 			_average = 0d;
 		}
 
+		/// <summary>
+        /// This property is used to access to Tontonator instance since it is a Singleton.
+        /// </summary>
+
+		public static Tontonator Instance
+        {
+			get
+            {
+				return _instance;
+            }
+        }
+
 		public void Init()
 		{
-            // Testing db connection.
-
-            // QuestionsService questions = new QuestionsService();
-            // questions.Add(_questions[0]);
-
-            var counter = 0;
-			foreach (var question in _questions)
-			{
-				counter++;
-
-				while (!question.IsCorrect)
-				{
-					Console.Clear();
-					Console.WriteLine(counter + ". " +question.QuestionName);
-					question.ShowOptions();
-					var opt = Console.ReadLine();
-					question.EvaluateOption(opt);
-					ThinkOnCharacter(question);
-				}
-			}
+            for (int i = 0; i < questions.Count; i++) questions[i] = States.ShowQuestion(questions[i], i++);
 
 			Console.WriteLine(_average);
 		}
@@ -54,7 +49,7 @@ namespace Tontonator.Core
 		{
 			UpdateAvg();
 
-			foreach (var question in _questions)
+			foreach (var question in questions)
 			{
 				
 				Object.Equals("","");
@@ -64,10 +59,10 @@ namespace Tontonator.Core
 		private void UpdateAvg()
 		{
 			double aux = 0d;
-			foreach (var question in _questions)
+			foreach (var question in questions)
 				aux += question.QuestionRate;
 
-			aux = aux / _questions.Count;
+			aux = aux / questions.Count;
 			_average = aux;
 		}
 	}

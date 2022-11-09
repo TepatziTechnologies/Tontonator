@@ -12,6 +12,7 @@ namespace Tontonator.Models.Enums
         No,
         Probablemente,
         ProbablementeNo,
-        Nose
+        Nose,
+        Null
     }
 }

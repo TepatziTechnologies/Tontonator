@@ -8,8 +8,11 @@ namespace Tontonator.Core.Services
 {
     public class CharactersService : EntityBaseRepository<Character>
     {
+        private QuestionsService _questionsService;
+
         public CharactersService() : base("characters")
         {
+            _questionsService = new QuestionsService();    
         }
 
         public virtual Character AddCharacter(Character entity)
@@ -22,11 +25,28 @@ namespace Tontonator.Core.Services
 
             foreach (var question in entity.Questions)
             {
-                questionsCollection.Document(question.Id).SetAsync(question.ToDictionaryComplete()).GetAwaiter().GetResult();
+                if (!string.IsNullOrEmpty(question.Id))
+                {
+                    questionsCollection.Document(question.Id).CreateAsync(question.ToDictionaryComplete()).GetAwaiter().GetResult();
+                }
+                else
+                {
+                    var questionFromDb = _questionsService.Read(nameof(Question.QuestionName), question.QuestionName);
+                    if (string.IsNullOrEmpty(questionFromDb.Id))
+                    {
+                        var newQuestionCreated = _questionsService.Add(question);
+                        question.Id = newQuestionCreated.Id;
+                        questionsCollection.Document(question.Id).SetAsync(question.ToDictionaryComplete()).GetAwaiter().GetResult();
+                    }
+                    else
+                    {
+                        question.Id = questionFromDb.Id;
+                        questionsCollection.Document(question.Id).SetAsync(question.ToDictionaryComplete()).GetAwaiter().GetResult();
+                    }
+                }
             }
 
             return new Character();
         }
     }
 }
-

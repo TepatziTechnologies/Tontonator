@@ -34,6 +34,7 @@ namespace Tontonator.Models
 			this.QuestionCategory = questionCategory;
 			this.IsCorrect = false;
 			this.QuestionRate = 0;
+			this.QuestionOption = QuestionOption.Null;
 		}
 
 		public Question(string questionName, string questionCategory, QuestionOption questionOption, double questionRate)
