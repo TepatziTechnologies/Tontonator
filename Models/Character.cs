@@ -33,8 +33,28 @@ namespace Tontonator.Models
 			dictionary.Add("Id", this.Id);
 			dictionary.Add("CharacterName", this.CharacterName);
 			dictionary.Add("CharacterCategory", this.CharacterCategory);
+			dictionary.Add("Questions", this.QuestionsToArray());
 
 			return dictionary;
+        }
+
+		/// <summary>
+		/// This method should be used only when storing data into the database,
+		/// </summary>
+		/// <returns></returns>
+		private Question[] QuestionsToArray()
+		{
+			Question[] questions = new Question[this.Questions.Count()];
+
+			var counter = 0;
+			
+			foreach (var question in this.Questions)
+            {
+				questions[counter] = question;
+				counter++;
+            }
+
+			return questions;
         }
 	}
 }

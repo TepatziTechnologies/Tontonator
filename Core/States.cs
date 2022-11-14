@@ -81,7 +81,7 @@ namespace Tontonator.Core
                 while (!question.IsCorrect)
                 {
                     Console.Clear();
-                    Console.WriteLine(index + ". " + question.QuestionName);
+                    Console.WriteLine(index++ + ". " + question.QuestionName);
                     question.ShowOptions();
                     var opt = Console.ReadLine();
                     question.EvaluateOption(opt);

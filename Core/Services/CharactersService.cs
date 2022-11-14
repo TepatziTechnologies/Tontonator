@@ -19,7 +19,6 @@ namespace Tontonator.Core.Services
         {
             DocumentReference document = _firestoreDb.Collection(this.collection).Document();
             entity.Id = document.Id;
-            var result = document.SetAsync(entity.ToDictionary()).GetAwaiter().GetResult();
 
             var questionsCollection = document.Collection("questions");
 
@@ -36,17 +35,30 @@ namespace Tontonator.Core.Services
                     {
                         var newQuestionCreated = _questionsService.Add(question);
                         question.Id = newQuestionCreated.Id;
-                        questionsCollection.Document(question.Id).SetAsync(question.ToDictionaryComplete()).GetAwaiter().GetResult();
+                        //questionsCollection.Document(question.Id).SetAsync(question.ToDictionaryComplete()).GetAwaiter().GetResult();
                     }
                     else
                     {
                         question.Id = questionFromDb.Id;
-                        questionsCollection.Document(question.Id).SetAsync(question.ToDictionaryComplete()).GetAwaiter().GetResult();
+                        //questionsCollection.Document(question.Id).SetAsync(question.ToDictionaryComplete()).GetAwaiter().GetResult();
                     }
                 }
             }
 
+            var result = document.SetAsync(entity.ToDictionary()).GetAwaiter().GetResult();
+
             return new Character();
+        }
+
+        public List<Character> ReadByQuestions(List<Question> questions)
+        {
+            List<Character> characters = new List<Character>();
+
+            var parentCollection = _firestoreDb.Collection(this.collection);
+
+            //parentCollection.WhereArrayContains().GetSnapshotAsync().GetAwaiter().GetResult();
+
+            return characters;
         }
     }
 }

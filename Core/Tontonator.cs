@@ -40,7 +40,7 @@ namespace Tontonator.Core
 
 		public void Init()
 		{
-            for (int i = 0; i < questions.Count; i++) questions[i] = States.ShowQuestion(questions[i], i++);
+            for (int i = 0; i < questions.Count; i++) questions[i] = States.ShowQuestion(questions[i], i);
 
 			Console.WriteLine(_average);
 		}
@@ -51,7 +51,7 @@ namespace Tontonator.Core
 
 			foreach (var question in questions)
 			{
-				
+				//question.EvaluateOption();
 				Object.Equals("","");
 			}
 		}

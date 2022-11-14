@@ -8,20 +8,26 @@ using Google.Cloud.Firestore;
 using Tontonator.Core.Data.BaseRepository;
 using Tontonator.Core.Helpers;
 using Tontonator.Models.Enums;
+using static Grpc.Core.Metadata;
 
 namespace Tontonator.Models
 {
+    [FirestoreData]
 	public class Question : IQuestion, IEntityBase
 	{
         [FirestoreProperty]
 		public string Id { get; set; }
         [FirestoreProperty]
 		public string QuestionName { get; set; }
-		public string QuestionCategory { get; set; }
+        [FirestoreProperty]
+        public string QuestionCategory { get; set; }
 		public string[] QuestionOptions { get => new string[] { "Si", "No", "Probablemente", "Probablemente no", "No sé" }; }
 		public bool IsCorrect { get; set; }
-		public double QuestionRate { get; set; }
-		public QuestionOption QuestionOption { get; set; }
+
+        [FirestoreProperty]
+        public double QuestionRate { get; set; }
+        [FirestoreProperty]
+        public QuestionOption QuestionOption { get; set; }
 
 		public Question()
         {
