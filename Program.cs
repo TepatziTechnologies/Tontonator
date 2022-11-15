@@ -13,8 +13,6 @@ namespace Tontonator
             //DataLoader.FeedDatabaseQuestions();
             //DataLoader.FeedDatabaseCharacters();
             App.Init();
-
-			
 		}
 	}
 }

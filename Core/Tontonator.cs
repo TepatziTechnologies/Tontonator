@@ -14,7 +14,7 @@ namespace Tontonator.Core
 	{
         private double _average;
 
-		private const bool DATABASE = true;
+		public const bool DATABASE_OFF = true;
 
         private readonly CharactersService _charactersService;
 		private readonly QuestionsService _questionsService;
@@ -25,7 +25,7 @@ namespace Tontonator.Core
         public List<Question> questions;
         private List<Question> _checkedQuestions;
 		private List<Question> _liveQuestions;
-		private List<Question> _toCharacter;
+		private List<Question> toCharacter;
 		private List<Question> alreadyAskedQuestions;
 
         private readonly static Tontonator _instance = new Tontonator();
@@ -34,7 +34,7 @@ namespace Tontonator.Core
 		{
 			questions = DataManager.GetBasicQuestions();
 			_checkedQuestions = new List<Question>();
-			_toCharacter = new List<Question>();
+			toCharacter = new List<Question>();
 			_questionsService = new QuestionsService();
 			_liveQuestions = new List<Question>();
 			_charactersService = new CharactersService();
@@ -70,9 +70,9 @@ namespace Tontonator.Core
 
             _nextPossibleCharacters = _charactersService.ReadByQuestions(_liveQuestions);
 
-			if (currentQuestion.QuestionOption == QuestionOption.Si || currentQuestion.QuestionOption == QuestionOption.Probablemente) _toCharacter.Add(currentQuestion);
+			if (currentQuestion.QuestionOption == QuestionOption.Si || currentQuestion.QuestionOption == QuestionOption.Probablemente) toCharacter.Add(currentQuestion);
 
-			//if ()
+				//if ()
 		}
 
 		private void UpdateAvg()

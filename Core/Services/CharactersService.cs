@@ -12,11 +12,12 @@ namespace Tontonator.Core.Services
 
         public CharactersService() : base("characters")
         {
-            _questionsService = new QuestionsService();    
+            _questionsService = new QuestionsService();
         }
 
         public virtual Character AddCharacter(Character entity)
         {
+            //
             DocumentReference document = _firestoreDb.Collection(this.collection).Document();
             entity.Id = document.Id;
 
@@ -52,6 +53,8 @@ namespace Tontonator.Core.Services
 
         public List<Character> ReadByQuestions(List<Question> questions)
         {
+
+            //
             List<Character> characters = new List<Character>();
             List<string> values = new List<string>();
 

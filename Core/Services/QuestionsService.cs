@@ -8,7 +8,7 @@ namespace Tontonator.Core.Services
     {
         public QuestionsService() : base("questions")
         {
-
+            
         }
     }
 }
