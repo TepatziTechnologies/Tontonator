@@ -53,10 +53,19 @@ namespace Tontonator.Core.Services
         public List<Character> ReadByQuestions(List<Question> questions)
         {
             List<Character> characters = new List<Character>();
+            List<string> values = new List<string>();
+
 
             var parentCollection = _firestoreDb.Collection(this.collection);
 
-            //parentCollection.WhereArrayContains().GetSnapshotAsync().GetAwaiter().GetResult();
+            foreach (var question in questions)
+            {
+                values.Add(question.QuestionName);
+            }
+
+            parentCollection.WhereArrayContainsAny(nameof(Character.Questions), values.ToArray()).GetSnapshotAsync().GetAwaiter().GetResult();
+
+            
 
             return characters;
         }

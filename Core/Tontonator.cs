@@ -6,22 +6,39 @@ using System.Threading.Tasks;
 using Tontonator.Core.Data;
 using Tontonator.Core.Services;
 using Tontonator.Models;
+using Tontonator.Models.Enums;
 
 namespace Tontonator.Core
 {
 	public class Tontonator
 	{
-		public List<Question> questions;
-		private double _average;
+        private double _average;
+
+		private const bool DATABASE = true;
+
+        private readonly CharactersService _charactersService;
+		private readonly QuestionsService _questionsService;
+
 		private List<Character> _possibleCharacters;
 		private List<Character> _nextPossibleCharacters;
+
+        public List<Question> questions;
+        private List<Question> _checkedQuestions;
+		private List<Question> _liveQuestions;
+		private List<Question> _toCharacter;
+		private List<Question> alreadyAskedQuestions;
 
         private readonly static Tontonator _instance = new Tontonator();
 
         private Tontonator()
 		{
 			questions = DataManager.GetBasicQuestions();
-			_possibleCharacters = new List<Character>();
+			_checkedQuestions = new List<Question>();
+			_toCharacter = new List<Question>();
+			_questionsService = new QuestionsService();
+			_liveQuestions = new List<Question>();
+			_charactersService = new CharactersService();
+            _possibleCharacters = new List<Character>();
 			_nextPossibleCharacters = new List<Character>();
 			_average = 0d;
 		}
@@ -48,12 +65,14 @@ namespace Tontonator.Core
 		public void ThinkOnCharacter(Question currentQuestion)
 		{
 			UpdateAvg();
+			_liveQuestions.Add(currentQuestion);
+			if (!_checkedQuestions.Exists(n => n.Id == currentQuestion.Id)) this._checkedQuestions.Add(currentQuestion);
 
-			foreach (var question in questions)
-			{
-				//question.EvaluateOption();
-				Object.Equals("","");
-			}
+            _nextPossibleCharacters = _charactersService.ReadByQuestions(_liveQuestions);
+
+			if (currentQuestion.QuestionOption == QuestionOption.Si || currentQuestion.QuestionOption == QuestionOption.Probablemente) _toCharacter.Add(currentQuestion);
+
+			//if ()
 		}
 
 		private void UpdateAvg()
@@ -65,5 +84,18 @@ namespace Tontonator.Core
 			aux = aux / questions.Count;
 			_average = aux;
 		}
+
+		private void MoveQuestionAhead()
+        {
+
+        }
+
+		private void ComparateQuestions()
+        {
+			foreach (var question in alreadyAskedQuestions)
+            {
+				if (questions.Exists(q => q.Id == question.Id)) questions.RemoveAll(qq => qq.Id == question.Id);
+            }
+        }
 	}
 }

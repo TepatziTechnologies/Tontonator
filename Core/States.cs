@@ -92,6 +92,29 @@ namespace Tontonator.Core
             return question;
         }
 
+        public static void CreateNewCharacterMenu(bool questionsRequired)
+        {
+            Console.WriteLine("No pude adivinar su personaje, ¿Desea añadirlo?");
+            Console.WriteLine("1. Si");
+            Console.WriteLine("2. No");
+            var opt = Console.ReadLine();
+            if (!string.IsNullOrEmpty(opt))
+            {
+                if (char.IsDigit(opt[0]))
+                {
+                    if (int.Parse(opt) == 1)
+                    {
+                        
+                    }
+                    else if (int.Parse(opt) == 2)
+                    {
+
+                    }
+                }
+            }
+
+        }
+
         /// <summary>
         /// This method checks if  the question is ready to be showed. This means when doing a call to the database should not return a null object.
         /// So this method should be used first before checking the question.
