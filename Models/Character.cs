@@ -13,6 +13,7 @@ namespace Tontonator.Models
 		public string CharacterName { get; set; }
 		public string CharacterCategory { get; set; }
 		public List<Question> Questions { get; set; }
+		public string[] IdQuestions { get; set; }
 
         public Character()
         {
@@ -33,7 +34,7 @@ namespace Tontonator.Models
 			dictionary.Add("Id", this.Id);
 			dictionary.Add("CharacterName", this.CharacterName);
 			dictionary.Add("CharacterCategory", this.CharacterCategory);
-			dictionary.Add("Questions", this.QuestionsToArray());
+			dictionary.Add("IdQuestions", this.QuestionsToArray());
 
 			return dictionary;
         }
@@ -42,15 +43,15 @@ namespace Tontonator.Models
 		/// This method should be used only when storing data into the database,
 		/// </summary>
 		/// <returns></returns>
-		private Question[] QuestionsToArray()
+		private string[] QuestionsToArray()
 		{
-			Question[] questions = new Question[this.Questions.Count()];
+			string[] questions = new string[this.Questions.Count()];
 
 			var counter = 0;
 			
 			foreach (var question in this.Questions)
             {
-				questions[counter] = question;
+				questions[counter] = question.Id;
 				counter++;
             }
 

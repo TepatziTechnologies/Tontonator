@@ -18,7 +18,8 @@ namespace Tontonator.Core.Data
 			characters.Add(new Character("El que siempre dice que si", "random", new List<Question>() {
 				new Question("¿Su personaje es real?",nameof(QuestionCategory.Basic), QuestionOption.Si, 1),
 				new Question("¿Su personaje es hombre?", nameof(QuestionCategory.Basic), QuestionOption.Si, 1),
-				new Question("¿Su personaje vive en mexico?", nameof(QuestionCategory.Character), QuestionOption.Si, 1),
+                new Question("¿Su personaje es un youtuber famoso?", nameof(QuestionCategory.Character), QuestionOption.Si, 1),
+                new Question("¿Su personaje vive en mexico?", nameof(QuestionCategory.Character), QuestionOption.Si, 1),
 				new Question("¿Su personaje habla ingles?", nameof(QuestionCategory.Character), QuestionOption.Si, 1),
 				new Question("¿Su personaje tiene 3 ojos?", nameof(QuestionCategory.Character), QuestionOption.Si, 1),
 				new Question("¿Su personaje vive en corea?", nameof(QuestionCategory.Character), QuestionOption.Si, 1),

@@ -1,6 +1,8 @@
 ﻿using System;
 using Google.Cloud.Firestore;
+using Newtonsoft.Json;
 using Tontonator.Core.Data.BaseRepository;
+using Tontonator.Core.Helpers;
 using Tontonator.Models;
 using static Grpc.Core.Metadata;
 
@@ -36,12 +38,12 @@ namespace Tontonator.Core.Services
                     {
                         var newQuestionCreated = _questionsService.Add(question);
                         question.Id = newQuestionCreated.Id;
-                        //questionsCollection.Document(question.Id).SetAsync(question.ToDictionaryComplete()).GetAwaiter().GetResult();
+                        questionsCollection.Document(question.Id).SetAsync(question.ToDictionaryComplete()).GetAwaiter().GetResult();
                     }
                     else
                     {
                         question.Id = questionFromDb.Id;
-                        //questionsCollection.Document(question.Id).SetAsync(question.ToDictionaryComplete()).GetAwaiter().GetResult();
+                        questionsCollection.Document(question.Id).SetAsync(question.ToDictionaryComplete()).GetAwaiter().GetResult();
                     }
                 }
             }
@@ -66,9 +68,32 @@ namespace Tontonator.Core.Services
                 values.Add(question.QuestionName);
             }
 
-            parentCollection.WhereArrayContainsAny(nameof(Character.Questions), values.ToArray()).GetSnapshotAsync().GetAwaiter().GetResult();
-
+            //var result = parentCollection.WhereArrayContainsAny(nameof(Character.Questions)+".QuestionName", values.ToArray()).GetSnapshotAsync().GetAwaiter().GetResult();
+            //var result = parentCollection.Document().Collection("questions").WhereIn()
             
+
+            return characters;
+        }
+
+        public List<Character> ReadByQuestion(Question question)
+        {
+            List<Character> characters = new List<Character>();
+
+            var parentCollection = _firestoreDb.Collection(this.collection);
+            var result = parentCollection.WhereArrayContains(nameof(Character.Questions), question.Id).GetSnapshotAsync().GetAwaiter().GetResult();
+
+            foreach(var document in result)
+            {
+                if (document.Exists)
+                {
+                    var dictionary = document.ToDictionary();
+                    var json = JsonConvert.SerializeObject(dictionary);
+                    var character = JsonConvert.DeserializeObject<Character>(json);
+
+                    if (character != null) characters.Add(character);
+                    else MessageHelper.WriteError("Ha ocurrido un error contacte a un administrador.");
+                }
+            }
 
             return characters;
         }

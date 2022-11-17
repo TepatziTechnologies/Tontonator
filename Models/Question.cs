@@ -21,7 +21,16 @@ namespace Tontonator.Models
 		public string QuestionName { get; set; }
         [FirestoreProperty]
         public string QuestionCategory { get; set; }
-		public string[] QuestionOptions { get => new string[] { "Si", "No", "Probablemente", "Probablemente no", "No sé" }; }
+
+		// Options disabled. Can be retaken later.
+		public string[] QuestionOptions { get => new string[] {
+			"Si",
+			"No",
+			//"Probablemente",
+			//"Probablemente no",
+			//"No sé"
+		};}
+
 		public bool IsCorrect { get; set; }
 
         [FirestoreProperty]
@@ -85,15 +94,15 @@ namespace Tontonator.Models
 								QuestionOption = QuestionOption.No;
 								IsCorrect = true;
 								break;
-							case 3:
+							case 3: // Option disabled
 								QuestionOption = QuestionOption.Probablemente;
 								IsCorrect = true;
 								break;
-							case 4:
+							case 4: // Option disabled
 								QuestionOption = QuestionOption.ProbablementeNo;
 								IsCorrect = true;
 								break;
-							case 5:
+							case 5: // Option disabled
 								QuestionOption = QuestionOption.Nose;
 								IsCorrect = true;
 								break;
@@ -102,7 +111,7 @@ namespace Tontonator.Models
 								break;
 						}
 
-						QuestionRate = QuestionManager.EvaluateQuestion(this);
+						EvaluateQuestion();
 					}
 					else
 					{
@@ -123,7 +132,16 @@ namespace Tontonator.Models
 			}
 		}
 
-		public Dictionary<string, object> ToDictionary()
+        private void EvaluateQuestion()
+        {
+            if (this.QuestionOption == QuestionOption.Si) this.QuestionRate = 1;
+            else if (this.QuestionOption == QuestionOption.No) this.QuestionRate = 0;
+            else if (this.QuestionOption == QuestionOption.Probablemente) this.QuestionRate = 0.75;
+            else if (this.QuestionOption == QuestionOption.ProbablementeNo) this.QuestionRate = 0.25;
+            else if (this.QuestionOption == QuestionOption.Nose) this.QuestionRate = 0.50;
+        }
+
+        public Dictionary<string, object> ToDictionary()
 		{
 			var dictionary = new Dictionary<string, object>();
 

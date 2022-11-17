@@ -23,20 +23,21 @@ namespace Tontonator.Core
 		private List<Character> _nextPossibleCharacters;
 
         public List<Question> questions;
-        private List<Question> _checkedQuestions;
-		private List<Question> _liveQuestions;
-		private List<Question> toCharacter;
-		private List<Question> alreadyAskedQuestions;
+        private List<Question> checkedQuestions;
+		private List<Question> liveQuestions;
+		private List<Question> positiveQuestions;
+        private List<Question> negativeQuestions;
+        private List<Question> alreadyAskedQuestions;
 
         private readonly static Tontonator _instance = new Tontonator();
 
         private Tontonator()
 		{
 			questions = DataManager.GetBasicQuestions();
-			_checkedQuestions = new List<Question>();
-			toCharacter = new List<Question>();
+			checkedQuestions = new List<Question>();
+			positiveQuestions = new List<Question>();
 			_questionsService = new QuestionsService();
-			_liveQuestions = new List<Question>();
+			liveQuestions = new List<Question>();
 			_charactersService = new CharactersService();
             _possibleCharacters = new List<Character>();
 			_nextPossibleCharacters = new List<Character>();
@@ -64,15 +65,26 @@ namespace Tontonator.Core
 
 		public void ThinkOnCharacter(Question currentQuestion)
 		{
-			UpdateAvg();
-			_liveQuestions.Add(currentQuestion);
-			if (!_checkedQuestions.Exists(n => n.Id == currentQuestion.Id)) this._checkedQuestions.Add(currentQuestion);
+			// Temporary disabled.
+			// UpdateAvg();
 
-            _nextPossibleCharacters = _charactersService.ReadByQuestions(_liveQuestions);
+			// We add the current questions, to the live sesion history.
+			liveQuestions.Add(currentQuestion);
 
-			if (currentQuestion.QuestionOption == QuestionOption.Si || currentQuestion.QuestionOption == QuestionOption.Probablemente) toCharacter.Add(currentQuestion);
+			// Then we check if the question has been
+			if (!checkedQuestions.Exists(n => n.Id == currentQuestion.Id)) this.checkedQuestions.Add(currentQuestion);
 
-				//if ()
+			_nextPossibleCharacters = _charactersService.ReadByQuestion(currentQuestion);
+
+			if (currentQuestion.QuestionOption == QuestionOption.Si)
+			{
+				positiveQuestions.Add(currentQuestion);
+			}
+			else if (currentQuestion.QuestionOption == QuestionOption.No)
+            {
+				negativeQuestions.Add(currentQuestion);
+            }
+
 		}
 
 		private void UpdateAvg()
@@ -90,12 +102,14 @@ namespace Tontonator.Core
 
         }
 
-		private void ComparateQuestions()
+		private void RemoveAlreadyAskedQuestions()
         {
-			foreach (var question in alreadyAskedQuestions)
-            {
-				if (questions.Exists(q => q.Id == question.Id)) questions.RemoveAll(qq => qq.Id == question.Id);
-            }
+			foreach (var question in alreadyAskedQuestions) if (questions.Exists(q => q.Id == question.Id)) questions.RemoveAll(qq => qq.Id == question.Id);
+        }
+
+		private void CheckDuplicatedQuestions()
+        {
+            foreach (var question in questions) if (questions.Exists(q => q.Id == question.Id)) questions.RemoveAll(q => q.Id == question.Id);
         }
 	}
 }
