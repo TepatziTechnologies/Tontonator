@@ -14,5 +14,12 @@ namespace Tontonator.Core.Helpers
 			Console.WriteLine(message);
 			Console.BackgroundColor = ConsoleColor.Black;
 		}
+
+		public static void WriteSuccess(string message)
+        {
+			Console.BackgroundColor = ConsoleColor.DarkGreen;
+			Console.WriteLine(message);
+			Console.BackgroundColor = ConsoleColor.Black;
+        }
 	}
 }

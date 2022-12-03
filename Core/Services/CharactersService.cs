@@ -55,22 +55,21 @@ namespace Tontonator.Core.Services
 
         public List<Character> ReadByQuestions(List<Question> questions)
         {
-
-            //
             List<Character> characters = new List<Character>();
             List<string> values = new List<string>();
 
-
-            var parentCollection = _firestoreDb.Collection(this.collection);
-
-            foreach (var question in questions)
+            if (!Tontonator.Instance.DATABASE_OFF)
             {
-                values.Add(question.QuestionName);
-            }
+                var parentCollection = _firestoreDb.Collection(this.collection);
 
-            //var result = parentCollection.WhereArrayContainsAny(nameof(Character.Questions)+".QuestionName", values.ToArray()).GetSnapshotAsync().GetAwaiter().GetResult();
-            //var result = parentCollection.Document().Collection("questions").WhereIn()
-            
+                foreach (var question in questions)
+                {
+                    values.Add(question.QuestionName);
+                }
+
+                //var result = parentCollection.WhereArrayContainsAny(nameof(Character.Questions)+".QuestionName", values.ToArray()).GetSnapshotAsync().GetAwaiter().GetResult();
+                //var result = parentCollection.Document().Collection("questions").WhereIn()
+            }
 
             return characters;
         }
@@ -79,23 +78,56 @@ namespace Tontonator.Core.Services
         {
             List<Character> characters = new List<Character>();
 
-            var parentCollection = _firestoreDb.Collection(this.collection);
-            var result = parentCollection.WhereArrayContains(nameof(Character.Questions), question.Id).GetSnapshotAsync().GetAwaiter().GetResult();
+            if (!Tontonator.Instance.DATABASE_OFF)
+            {
+                var parentCollection = _firestoreDb.Collection(this.collection);
+                var result = parentCollection.WhereArrayContains(nameof(Character.IdQuestions), question.Id).GetSnapshotAsync().GetAwaiter().GetResult();
 
-            foreach(var document in result)
+                foreach (var document in result)
+                {
+                    if (document.Exists)
+                    {
+                        var dictionary = document.ToDictionary();
+                        var json = JsonConvert.SerializeObject(dictionary);
+                        var character = JsonConvert.DeserializeObject<Character>(json);
+
+                        if (character != null)
+                        {
+                            character.Questions = GetCollectionQuestions(character.Id);
+                            characters.Add(character);
+                        }
+                        else MessageHelper.WriteError("Ha ocurrido un error contacte a un administrador.");
+                    }
+                }
+            }
+
+            return characters;
+        }
+
+        private List<Question> GetCollectionQuestions(string id)
+        {
+            List<Question> questions = new List<Question>();
+
+            var parentCollection = _firestoreDb.Collection(this.collection);
+            var documentReference = parentCollection.Document(id);
+            var questionsCollection = documentReference.Collection("questions");
+            var result = questionsCollection.GetSnapshotAsync().GetAwaiter().GetResult();
+
+            foreach (var document in result)
             {
                 if (document.Exists)
                 {
                     var dictionary = document.ToDictionary();
                     var json = JsonConvert.SerializeObject(dictionary);
-                    var character = JsonConvert.DeserializeObject<Character>(json);
+                    var character = JsonConvert.DeserializeObject<Question>(json);
 
-                    if (character != null) characters.Add(character);
+                    if (character != null) questions.Add(character);
                     else MessageHelper.WriteError("Ha ocurrido un error contacte a un administrador.");
                 }
             }
 
-            return characters;
+
+            return questions;
         }
     }
 }

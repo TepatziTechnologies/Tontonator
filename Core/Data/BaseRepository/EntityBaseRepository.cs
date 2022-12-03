@@ -21,7 +21,7 @@ namespace Tontonator.Core.Data.BaseRepository
 
         public T Add(T entity)
         {
-            if (!Tontonator.DATABASE_OFF) { 
+            if (!Tontonator.Instance.DATABASE_OFF) { 
                 DocumentReference document = _firestoreDb.Collection(this.collection).Document();
                 entity.Id = document.Id;
                 var result = document.SetAsync(entity.ToDictionary()).GetAwaiter().GetResult();

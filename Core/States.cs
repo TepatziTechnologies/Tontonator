@@ -2,6 +2,7 @@
 using System.Diagnostics.Metrics;
 using Tontonator.Core.Helpers;
 using Tontonator.Models;
+using Tontonator.Models.Enums;
 
 namespace Tontonator.Core
 {
@@ -78,6 +79,7 @@ namespace Tontonator.Core
         {
             if (IsQuestionReady(question))
             {
+                Tontonator.Instance.IncreaseCurrentIndex();
                 while (!question.IsCorrect)
                 {
                     Console.Clear();
@@ -92,6 +94,51 @@ namespace Tontonator.Core
             return question;
         }
 
+        /// <summary>
+        /// This shows the character, must pass a character as parameter.
+        /// </summary>
+        /// <param name="character">The character to display.</param>
+        public static void ShowCharacter(Character character)
+        {
+            Console.WriteLine("Su personaje es: " + character.CharacterName);
+            Console.WriteLine("1. Si");
+            Console.WriteLine("2. No");
+
+            var opt = Console.ReadLine();
+
+            if (!string.IsNullOrEmpty(opt))
+            {
+                if (char.IsDigit(opt[0]))
+                {
+                    if (int.Parse(opt) == 1)
+                    {
+                        Tontonator.Instance.Dispose();
+                        MessageHelper.WriteSuccess("Perfecto");
+                    }
+                    else if (int.Parse(opt) == 2)
+                    {
+                        if (Tontonator.Instance.CanRerol)
+                        {
+
+                        }
+                        else
+                        {
+                            var aux = "";
+                            var questionText = "";
+                            while (aux != "x")
+                            {
+                                MessageHelper.WriteError("Para guardar escriba GUARDAR.");
+                                Console.WriteLine("Ingrese una pregunta que describa su personaje");
+                                questionText = Console.ReadLine();
+                                new Question(questionText!, nameof(QuestionCategory.Character));
+                            }
+                            Console.WriteLine("");
+                        }
+                    }
+                }
+            }
+        }
+
         public static void CreateNewCharacterMenu(bool questionsRequired)
         {
             Console.WriteLine("No pude adivinar su personaje, ¿Desea añadirlo?");
@@ -104,7 +151,15 @@ namespace Tontonator.Core
                 {
                     if (int.Parse(opt) == 1)
                     {
-                        
+                        if (questionsRequired)
+                        {
+                            Tontonator.Instance.Dispose();
+                            MessageHelper.WriteSuccess("Perfecto");
+                        }
+                        else
+                        {
+
+                        }
                     }
                     else if (int.Parse(opt) == 2)
                     {
@@ -112,7 +167,6 @@ namespace Tontonator.Core
                     }
                 }
             }
-
         }
 
         /// <summary>
