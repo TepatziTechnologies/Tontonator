@@ -10,8 +10,8 @@ namespace Tontonator
 		{
             // Feed first time database.
 
-            //DataLoader.FeedDatabaseQuestions();
-            //DataLoader.FeedDatabaseCharacters();
+            // DataLoader.FeedDatabaseQuestions();
+            // DataLoader.FeedDatabaseCharacters();
             App.Init();
 		}
 	}

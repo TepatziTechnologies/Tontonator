@@ -21,11 +21,11 @@ namespace Tontonator.Core
 
 		public bool DATABASE_OFF;
 		public bool CanRerol { get; set; }
+        public bool IsActive { get; set; }
+		public bool QuestionsRequired { get; set; }
 
-		private bool questionsRequired = false;
 		private bool refillNeeded = true;
 		private bool alreadySet = false;
-		private bool IsActive;
 
 		private Character currentCharacter = new Character();
 
@@ -64,7 +64,6 @@ namespace Tontonator.Core
 			possibleCharacters = new List<Character>();
 			nextPossibleCharacters = new List<Character>();
 			deletedCharacters = new List<Character>();
-
 			
 			_average = 0d;
 			IsActive = true;
@@ -114,7 +113,7 @@ namespace Tontonator.Core
 				{
 					positiveQuestions.Add(currentQuestion);
 
-					if (possibleCharacters.Count == 0) States.CreateNewCharacterMenu(questionsRequired);
+					if (possibleCharacters.Count == 0) States.CreateNewCharacterMenu(QuestionsRequired);
 
 					CheckCharacter();
 					ChangeQuestion();
@@ -123,7 +122,7 @@ namespace Tontonator.Core
 				{
 					negativeQuestions.Add(currentQuestion);
 
-					if (possibleCharacters.Count == 0) States.CreateNewCharacterMenu(questionsRequired);
+					if (possibleCharacters.Count == 0) States.CreateNewCharacterMenu(QuestionsRequired);
 
 					CheckCharacter();
 					ChangeQuestion();
@@ -149,10 +148,10 @@ namespace Tontonator.Core
 
 		private void FillQuestions()
 		{
-			foreach (var character in possibleCharacters)
+			/*foreach (var character in possibleCharacters)
 			{
 				questions.AddRange(character.Questions);
-			}
+			}*/
 			CheckDuplicatedQuestions();
 			RemoveAlreadyAskedQuestions();
 		}
@@ -163,7 +162,7 @@ namespace Tontonator.Core
 			{
 				if (charactersInheritedQuestions.Count > 0) States.ShowQuestion(charactersInheritedQuestions[0], currentIndex);
 				else if (questions.Count > 0) States.ShowQuestion(questions[0], currentIndex);
-				else if (!(questions.Count > 0)) States.CreateNewCharacterMenu(questionsRequired);
+				else if (!(questions.Count > 0)) States.CreateNewCharacterMenu(QuestionsRequired);
 				//else if (questions.Count == 0) FillQuestions();
 			}
         }
@@ -177,11 +176,10 @@ namespace Tontonator.Core
 
 			foreach (var question in liveQuestions)
 			{
-
 				if (currentCharacter.Questions.Find(val => val.QuestionName == question.QuestionName) != null) count++;
             }
 
-			remaining = currentCharacter.Questions.Count - remaining;
+			remaining = currentCharacter.Questions.Count - count;
 
 			foreach (var question in liveQuestions)
 			{
@@ -189,11 +187,12 @@ namespace Tontonator.Core
 				{
 					if (question.QuestionName == cQuestion.QuestionName && question.QuestionOption == cQuestion.QuestionOption) hits++;				
 					else if (question.QuestionName == cQuestion.QuestionName && question.QuestionOption != cQuestion.QuestionOption) breaks++;
-					
 				}
 			}
 
-            if (remaining > 0 && breaks == 0) DisableDatabase();
+			if (remaining > 0 && breaks == 0) DisableDatabase();
+			else if (DATABASE_OFF && breaks > 0) EnableDatabase();
+
 
 			if (breaks > 0)
 			{
@@ -266,14 +265,6 @@ namespace Tontonator.Core
 			}
 		}
 
-		private void SetCharacterQuestions(Character character)
-		{
-            foreach (var question in character.Questions)
-            {
-                charactersInheritedQuestions.Add(question);
-            }
-		}
-
 		private void CalculatePossibleCharacters()
         {
 			var characters = new List<Character>();
@@ -291,9 +282,12 @@ namespace Tontonator.Core
         }
 
 		private void RemoveAlreadyAskedQuestions()
-        {
-			foreach (var question in alreadyAskedQuestions) if (questions.Exists(q => q.Id == question.Id)) questions.RemoveAll(qq => qq.Id == question.Id);
-            foreach (var question in alreadyAskedQuestions) if (charactersInheritedQuestions.Exists(q => q.Id == question.Id)) charactersInheritedQuestions.RemoveAll(qq => qq.Id == question.Id);
+		{
+			foreach (var question in alreadyAskedQuestions)
+			{
+				if (questions.Exists(q => q.Id == question.Id)) questions.RemoveAll(qq => qq.Id == question.Id);
+				if (charactersInheritedQuestions.Exists(q => q.Id == question.Id)) charactersInheritedQuestions.RemoveAll(qq => qq.Id == question.Id);
+			}
         }
 
 		private void CheckDuplicatedQuestions()
@@ -301,14 +295,23 @@ namespace Tontonator.Core
             foreach (var question in questions) if (questions.Exists(q => q.Id == question.Id)) questions.RemoveAll(q => q.Id == question.Id);
         }
 
-		public void IncreaseCurrentIndex() => currentIndex++;
+		private void SetCharacterQuestions(Character character)
+		{
+			var list = new List<Question>();
 
-		public void Dispose()
-        {
-			IsActive = false;
-        }
+            foreach (var question in character.Questions)
+            {
+				list.Add(new Question(question));
+            }
 
-		public void DisableDatabase() => DATABASE_OFF = true;
+			charactersInheritedQuestions = list;
+		}
+
+        public void AddQuestion(Question question) => _questionsService.Add(question);
+		public void Dispose() => IsActive = false;
+        public void IncreaseCurrentIndex() => currentIndex++;
+        public void DisableDatabase() => DATABASE_OFF = true;
         public void EnableDatabase() => DATABASE_OFF = false;
+		
     }
 }

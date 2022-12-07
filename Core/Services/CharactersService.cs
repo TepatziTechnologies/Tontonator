@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Tontonator.Core.Data.BaseRepository;
 using Tontonator.Core.Helpers;
 using Tontonator.Models;
+using Tontonator.Models.Enums;
 using static Grpc.Core.Metadata;
 
 namespace Tontonator.Core.Services

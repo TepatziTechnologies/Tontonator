@@ -14,5 +14,10 @@ namespace Tontonator.Core
         {
             States.ShowMainMenu();
         }
+
+        public static void Exit()
+        {
+            Environment.Exit(0);
+        }
     }
 }

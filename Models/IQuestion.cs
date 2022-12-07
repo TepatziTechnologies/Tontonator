@@ -10,8 +10,9 @@ namespace Tontonator.Models
 	public interface IQuestion
 	{
 		public string QuestionName { get; set; }
-		public string QuestionCategory { get; set; }
 		public string[] QuestionOptions { get; }
-		public QuestionOption QuestionOption { get; set; }
+		public Status Status {get; set;}
+        public QuestionCategory QuestionCategory { get; set; }
+        public QuestionOption QuestionOption { get; set; }
 	}
 }

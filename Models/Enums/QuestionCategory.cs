@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tontonator.Models.Enums
 {
-	enum QuestionCategory
+	public enum QuestionCategory
 	{
 		Basic,
 		Character,

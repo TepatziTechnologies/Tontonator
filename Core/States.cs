@@ -18,53 +18,56 @@ namespace Tontonator.Core
 
             while (opt != 2)
             {
-                Console.WriteLine("===== Bienvenido a tontonator =====");
-                Console.WriteLine("Seleccione una opción");
-                Console.WriteLine("1. Jugar");
-                Console.WriteLine("2. Salir");
-
-                string? aux = Console.ReadLine();
-
-                if (!string.IsNullOrEmpty(aux))
+                if (Tontonator.Instance.IsActive)
                 {
-                    if (aux.Length == 1)
+                    Console.WriteLine("===== Bienvenido a tontonator =====");
+                    Console.WriteLine("Seleccione una opción");
+                    Console.WriteLine("1. Jugar");
+                    Console.WriteLine("2. Salir");
+
+                    string? aux = Console.ReadLine();
+
+                    if (!string.IsNullOrEmpty(aux))
                     {
-                        if (char.IsDigit(aux[0]))
+                        if (aux.Length == 1)
                         {
-                            opt = int.Parse(aux);
-
-                            Console.Clear();
-
-                            switch (opt)
+                            if (char.IsDigit(aux[0]))
                             {
-                                case 1:
-                                    Tontonator.Instance.Init();
-                                    break;
-                                case 2:
-                                    Console.WriteLine("Saliendo...");
-                                    break;
-                                default:
-                                    MessageHelper.WriteError("ERROR: Ingrese un valor valido");
-                                    break;
+                                opt = int.Parse(aux);
+
+                                Console.Clear();
+
+                                switch (opt)
+                                {
+                                    case 1:
+                                        Tontonator.Instance.Init();
+                                        break;
+                                    case 2:
+                                        Console.WriteLine("Saliendo...");
+                                        break;
+                                    default:
+                                        MessageHelper.WriteError("ERROR: Ingrese un valor valido");
+                                        break;
+                                }
                             }
+                            else
+                            {
+                                Console.Clear();
+                                MessageHelper.WriteError("ERROR: Ingrese un valor númerico");
+                            }
+
                         }
                         else
                         {
                             Console.Clear();
-                            MessageHelper.WriteError("ERROR: Ingrese un valor númerico");
+                            MessageHelper.WriteError("ERROR: Ingrese un valor valido");
                         }
-
                     }
                     else
                     {
                         Console.Clear();
-                        MessageHelper.WriteError("ERROR: Ingrese un valor valido");
+                        MessageHelper.WriteError("ERROR: El campo no puede estar vacio.");
                     }
-                }
-                else
-                {
-                    Console.Clear();
-                    MessageHelper.WriteError("ERROR: El campo no puede estar vacio.");
                 }
             }
         }
@@ -77,17 +80,20 @@ namespace Tontonator.Core
         /// <returns>Returns a question with all its properties filled.</returns>
         public static Question ShowQuestion(Question question, int index)
         {
-            if (IsQuestionReady(question))
+            if (Tontonator.Instance.IsActive)
             {
-                Tontonator.Instance.IncreaseCurrentIndex();
-                while (!question.IsCorrect)
+                if (IsQuestionReady(question))
                 {
-                    Console.Clear();
-                    Console.WriteLine(index++ + ". " + question.QuestionName);
-                    question.ShowOptions();
-                    var opt = Console.ReadLine();
-                    question.EvaluateOption(opt);
-                    Tontonator.Instance.ThinkOnCharacter(question);
+                    Tontonator.Instance.IncreaseCurrentIndex();
+                    while (!question.IsCorrect)
+                    {
+                        Console.Clear();
+                        Console.WriteLine(index++ + ". " + question.QuestionName);
+                        question.ShowOptions();
+                        var opt = Console.ReadLine();
+                        question.EvaluateOption(opt);
+                        Tontonator.Instance.ThinkOnCharacter(question);
+                    }
                 }
             }
 
@@ -113,26 +119,19 @@ namespace Tontonator.Core
                     if (int.Parse(opt) == 1)
                     {
                         Tontonator.Instance.Dispose();
-                        MessageHelper.WriteSuccess("Perfecto");
+                        MessageHelper.WriteSuccess("He adivinado su personaje. Presione cualquier tecla para salir.");
+                        Console.ReadKey();
+                        App.Exit();
                     }
                     else if (int.Parse(opt) == 2)
                     {
                         if (Tontonator.Instance.CanRerol)
                         {
-
+                            // Here does something
                         }
                         else
                         {
-                            var aux = "";
-                            var questionText = "";
-                            while (aux != "x")
-                            {
-                                MessageHelper.WriteError("Para guardar escriba GUARDAR.");
-                                Console.WriteLine("Ingrese una pregunta que describa su personaje");
-                                questionText = Console.ReadLine();
-                                new Question(questionText!, nameof(QuestionCategory.Character));
-                            }
-                            Console.WriteLine("");
+                            CreateNewCharacterMenu(Tontonator.Instance.QuestionsRequired);
                         }
                     }
                 }
@@ -153,8 +152,7 @@ namespace Tontonator.Core
                     {
                         if (questionsRequired)
                         {
-                            Tontonator.Instance.Dispose();
-                            MessageHelper.WriteSuccess("Perfecto");
+                            
                         }
                         else
                         {
@@ -163,10 +161,38 @@ namespace Tontonator.Core
                     }
                     else if (int.Parse(opt) == 2)
                     {
-
+                        Tontonator.Instance.Dispose();
+                        Console.Clear();
+                        MessageHelper.WriteSuccess("Presiona cualquier tecla para terminar.");
+                        Console.ReadKey();
+                        App.Exit();
                     }
                 }
             }
+        }
+
+        private Question FormQuestion()
+        {
+            var question = new Question();
+
+            Console.WriteLine("Ingrese una pregunta");
+
+            var questionTxt = Console.ReadLine();
+
+            if (!string.IsNullOrEmpty(questionTxt))
+            {
+                if (questionTxt.StartsWith('¿') && questionTxt.EndsWith('?'))
+                {
+                    question = new Question(questionTxt, QuestionCategory.Character, Status.Disabled);
+                    
+                }
+                else
+                {
+                    MessageHelper.WriteError("Intentalo de nuevo.");
+                }
+            }
+
+            return question;
         }
 
         /// <summary>
@@ -175,6 +201,6 @@ namespace Tontonator.Core
         /// </summary>
         /// <param name="question">The question to be checked.</param>
         /// <returns>Returns either true if the question is not null or false if it is null.</returns>
-        private static bool IsQuestionReady(Question question) => question != null ? true : false;
+        private static bool IsQuestionReady(Question question) => question != null ? true : false;   
     }
 }

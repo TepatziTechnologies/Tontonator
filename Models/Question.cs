@@ -20,7 +20,9 @@ namespace Tontonator.Models
         [FirestoreProperty]
 		public string QuestionName { get; set; }
         [FirestoreProperty]
-        public string QuestionCategory { get; set; }
+        public QuestionCategory QuestionCategory { get; set; }
+        [FirestoreProperty]
+		public Status Status { get; set; }
 
 		// Options disabled. Can be retaken later.
 		public string[] QuestionOptions { get => new string[] {
@@ -43,24 +45,45 @@ namespace Tontonator.Models
 			
         }
 
-		public Question(string questionName, string questionCategory)
+		public Question(Question question)
+        {
+			this.Id = question.Id;
+			this.QuestionName = question.QuestionName;
+			this.QuestionCategory = question.QuestionCategory;
+			this.Status = question.Status;
+			this.IsCorrect = question.IsCorrect;
+			this.QuestionRate = question.QuestionRate;
+			this.QuestionOption = question.QuestionOption;
+        }
+
+        public Question(string questionName, QuestionCategory questionCategory, Status status)
 		{
 			this.QuestionName = questionName;
 			this.QuestionCategory = questionCategory;
 			this.IsCorrect = false;
 			this.QuestionRate = 0;
 			this.QuestionOption = QuestionOption.Null;
+			this.Status = status;
 		}
 
-		public Question(string questionName, string questionCategory, QuestionOption questionOption, double questionRate)
+		public Question(string questionName, QuestionCategory questionCategory, QuestionOption questionOption, double questionRate, Status status)
 		{
 			this.QuestionName = questionName;
 			this.QuestionCategory = questionCategory;
 			this.QuestionOption = questionOption;
 			this.QuestionRate = questionRate;
+			this.Status = status;
 		}
 
-		public void ShowOptions()
+        public Question(string questionName, QuestionCategory questionCategory, QuestionOption questionOption, double questionRate)
+        {
+            this.QuestionName = questionName;
+            this.QuestionCategory = questionCategory;
+            this.QuestionOption = questionOption;
+            this.QuestionRate = questionRate;
+        }
+
+        public void ShowOptions()
 		{
 			var counter = 1;
 			foreach (var option in QuestionOptions) 
@@ -148,6 +171,7 @@ namespace Tontonator.Models
 			dictionary.Add("Id", this.Id);
 			dictionary.Add("QuestionName", this.QuestionName);
 			dictionary.Add("QuestionCategory", this.QuestionCategory);
+			dictionary.Add("Status", this.Status);
 
             return dictionary;
         }
@@ -161,6 +185,7 @@ namespace Tontonator.Models
             dictionary.Add("QuestionCategory", this.QuestionCategory);
 			dictionary.Add("QuestionRate", this.QuestionRate);
 			dictionary.Add("QuestionOption", this.QuestionOption);
+            dictionary.Add("Status", this.Status);
 
             return dictionary;
         }

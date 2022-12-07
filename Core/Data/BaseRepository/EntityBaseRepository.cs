@@ -56,7 +56,7 @@ namespace Tontonator.Core.Data.BaseRepository
             return entity;
         }
 
-        public List<T> ReadAll(string field, string queryValue)
+        public List<T> ReadAll(string field, object queryValue)
         {
             //
 
