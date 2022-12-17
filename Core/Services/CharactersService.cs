@@ -28,11 +28,7 @@ namespace Tontonator.Core.Services
 
             foreach (var question in entity.Questions)
             {
-                if (!string.IsNullOrEmpty(question.Id))
-                {
-                    questionsCollection.Document(question.Id).CreateAsync(question.ToDictionaryComplete()).GetAwaiter().GetResult();
-                }
-                else
+                if (string.IsNullOrEmpty(question.Id))
                 {
                     var questionFromDb = _questionsService.Read(nameof(Question.QuestionName), question.QuestionName);
                     if (string.IsNullOrEmpty(questionFromDb.Id))
@@ -46,6 +42,10 @@ namespace Tontonator.Core.Services
                         question.Id = questionFromDb.Id;
                         questionsCollection.Document(question.Id).SetAsync(question.ToDictionaryComplete()).GetAwaiter().GetResult();
                     }
+                }
+                else
+                {
+                    questionsCollection.Document(question.Id).CreateAsync(question.ToDictionaryComplete()).GetAwaiter().GetResult();
                 }
             }
 

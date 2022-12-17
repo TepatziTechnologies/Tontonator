@@ -100,6 +100,27 @@ namespace Tontonator.Core
             return question;
         }
 
+        public static Question ShowQuestion(Question question)
+        {
+            if (Tontonator.Instance.IsActive)
+            {
+                if (IsQuestionReady(question))
+                {
+                    Tontonator.Instance.IncreaseCurrentIndex();
+                    while (!question.IsCorrect)
+                    {
+                        Console.Clear();
+                        Console.WriteLine(question.QuestionName);
+                        question.ShowOptions();
+                        var opt = Console.ReadLine();
+                        question.EvaluateOption(opt);
+                    }
+                }
+            }
+
+            return question;
+        }
+
         /// <summary>
         /// This shows the character, must pass a character as parameter.
         /// </summary>
@@ -140,6 +161,9 @@ namespace Tontonator.Core
 
         public static void CreateNewCharacterMenu(bool questionsRequired)
         {
+            List<Question> questions = new List<Question>();
+            var characterName = "";
+
             Console.WriteLine("No pude adivinar su personaje, ¿Desea añadirlo?");
             Console.WriteLine("1. Si");
             Console.WriteLine("2. No");
@@ -150,13 +174,32 @@ namespace Tontonator.Core
                 {
                     if (int.Parse(opt) == 1)
                     {
+                        Tontonator.Instance.EnableDatabase();
+
                         if (questionsRequired)
                         {
-                            
+                            if (Tontonator.Instance.GetAskedQuestions().Count > 0)
+                            {
+                                questions = Tontonator.Instance.GetAskedQuestions();
+                            }
                         }
                         else
                         {
+                            for (int i = 0; i < 5; i++)
+                            {
+                                var question = FormQuestion();
 
+                                if (Tontonator.Instance.CheckQuestionByName(question.QuestionName)) question = Tontonator.Instance.GetQuestionByName(question.QuestionName);
+                                else question = Tontonator.Instance.AddQuestion(FormQuestion());
+
+                                if (question.IsCorrect) Console.Write("");
+                            }
+
+                            if(questions.Count > 0)
+                            {
+                                Console.WriteLine("Ingrese el nombre para su personaje: ");
+                                characterName = Console.ReadLine();
+                            }
                         }
                     }
                     else if (int.Parse(opt) == 2)
@@ -171,25 +214,26 @@ namespace Tontonator.Core
             }
         }
 
-        private Question FormQuestion()
+        private static Question FormQuestion()
         {
             var question = new Question();
 
+            Console.Clear();
             Console.WriteLine("Ingrese una pregunta");
 
             var questionTxt = Console.ReadLine();
 
             if (!string.IsNullOrEmpty(questionTxt))
             {
-                if (questionTxt.StartsWith('¿') && questionTxt.EndsWith('?'))
-                {
+                //if (questionTxt.StartsWith('¿') && questionTxt.EndsWith('?'))
+                //{
                     question = new Question(questionTxt, QuestionCategory.Character, Status.Disabled);
-                    
-                }
+                    ShowQuestion(question);
+                /*}
                 else
                 {
                     MessageHelper.WriteError("Intentalo de nuevo.");
-                }
+                }*/
             }
 
             return question;

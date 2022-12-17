@@ -162,7 +162,7 @@ namespace Tontonator.Core
 			{
 				if (charactersInheritedQuestions.Count > 0) States.ShowQuestion(charactersInheritedQuestions[0], currentIndex);
 				else if (questions.Count > 0) States.ShowQuestion(questions[0], currentIndex);
-				else if (!(questions.Count > 0)) States.CreateNewCharacterMenu(QuestionsRequired);
+				else if (questions.Count == 0) States.CreateNewCharacterMenu(QuestionsRequired);
 				//else if (questions.Count == 0) FillQuestions();
 			}
         }
@@ -192,7 +192,6 @@ namespace Tontonator.Core
 
 			if (remaining > 0 && breaks == 0) DisableDatabase();
 			else if (DATABASE_OFF && breaks > 0) EnableDatabase();
-
 
 			if (breaks > 0)
 			{
@@ -307,11 +306,20 @@ namespace Tontonator.Core
 			charactersInheritedQuestions = list;
 		}
 
-        public void AddQuestion(Question question) => _questionsService.Add(question);
+		/// <summary>
+        /// This method...
+        /// </summary>
 		public void Dispose() => IsActive = false;
+
+		/// <summary>
+        /// Method to increase the current index that will be shown when asking a question.
+        /// </summary>
         public void IncreaseCurrentIndex() => currentIndex++;
         public void DisableDatabase() => DATABASE_OFF = true;
         public void EnableDatabase() => DATABASE_OFF = false;
-		
+		public bool CheckQuestionByName(string name) => _questionsService.Read(nameof(Question.QuestionName), name) != null ? true : false;
+        public Question AddQuestion(Question question) => _questionsService.Add(question);
+        public Question GetQuestionByName(string name) => _questionsService.Read(nameof(Question.QuestionName), name);
+        public List<Question> GetAskedQuestions() => alreadyAskedQuestions;
     }
 }

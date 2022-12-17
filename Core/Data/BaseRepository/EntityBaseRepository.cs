@@ -32,6 +32,7 @@ namespace Tontonator.Core.Data.BaseRepository
 
         public Task Delete(T entity)
         {
+            // Need to check for this.
             throw new NotImplementedException();
         }
 
