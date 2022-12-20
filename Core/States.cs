@@ -192,7 +192,7 @@ namespace Tontonator.Core
                                 if (Tontonator.Instance.CheckQuestionByName(question.QuestionName)) question = Tontonator.Instance.GetQuestionByName(question.QuestionName);
                                 else question = Tontonator.Instance.AddQuestion(FormQuestion());
 
-                                if (question.IsCorrect) Console.Write("");
+                                if (question != null) questions.Add(question);
                             }
 
                             if(questions.Count > 0)

@@ -317,7 +317,7 @@ namespace Tontonator.Core
         public void IncreaseCurrentIndex() => currentIndex++;
         public void DisableDatabase() => DATABASE_OFF = true;
         public void EnableDatabase() => DATABASE_OFF = false;
-		public bool CheckQuestionByName(string name) => _questionsService.Read(nameof(Question.QuestionName), name) != null ? true : false;
+		public bool CheckQuestionByName(string name) => string.IsNullOrEmpty(_questionsService.Read(nameof(Question.QuestionName), name).Id) ? false : true;
         public Question AddQuestion(Question question) => _questionsService.Add(question);
         public Question GetQuestionByName(string name) => _questionsService.Read(nameof(Question.QuestionName), name);
         public List<Question> GetAskedQuestions() => alreadyAskedQuestions;
