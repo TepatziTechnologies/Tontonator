@@ -162,12 +162,16 @@ namespace Tontonator.Core
         public static void CreateNewCharacterMenu(bool questionsRequired)
         {
             List<Question> questions = new List<Question>();
+
             var characterName = "";
+            var character = new Character();
 
             Console.WriteLine("No pude adivinar su personaje, ¿Desea añadirlo?");
             Console.WriteLine("1. Si");
             Console.WriteLine("2. No");
+
             var opt = Console.ReadLine();
+
             if (!string.IsNullOrEmpty(opt))
             {
                 if (char.IsDigit(opt[0]))
@@ -178,19 +182,18 @@ namespace Tontonator.Core
 
                         if (questionsRequired)
                         {
-                            if (Tontonator.Instance.GetAskedQuestions().Count > 0)
-                            {
-                                questions = Tontonator.Instance.GetAskedQuestions();
-                            }
+                            if (Tontonator.Instance.GetAskedQuestions().Count > 0) questions = Tontonator.Instance.GetAskedQuestions();
                         }
                         else
                         {
+                            questions = Tontonator.Instance.GetAskedQuestions();
+
                             for (int i = 0; i < 5; i++)
                             {
                                 var question = FormQuestion();
+                                var questionByName = Tontonator.Instance.GetQuestionByName(question.QuestionName);
 
-                                if (Tontonator.Instance.CheckQuestionByName(question.QuestionName)) question = Tontonator.Instance.GetQuestionByName(question.QuestionName);
-                                else question = Tontonator.Instance.AddQuestion(FormQuestion());
+                                if (string.IsNullOrEmpty(questionByName.Id)) question = Tontonator.Instance.AddQuestion(question);
 
                                 if (question != null) questions.Add(question);
                             }
@@ -200,9 +203,17 @@ namespace Tontonator.Core
                                 Console.WriteLine("Ingrese el nombre para su personaje: ");
                                 characterName = Console.ReadLine();
                             }
+
+                            if (questions.Count > 0 && !string.IsNullOrEmpty(characterName))
+                            {
+                                character = new Character(characterName, CharacterCategory.Unassigned, questions);
+                                character = Tontonator.Instance.AddCharacter(character);
+                            }
+
+                            if (string.IsNullOrEmpty(character.Id)) Console.WriteLine("Su personaje se ha enviado para revisión.");
                         }
                     }
-                    else if (int.Parse(opt) == 2)
+                    else if (int.Parse(opt) == 2) 
                     {
                         Tontonator.Instance.Dispose();
                         Console.Clear();

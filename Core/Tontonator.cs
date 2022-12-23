@@ -16,7 +16,7 @@ namespace Tontonator.Core
 		private readonly QuestionsService _questionsService;
 
 		private double _average;
-
+		
 		private int currentIndex = 1;
 
 		public bool DATABASE_OFF;
@@ -24,8 +24,8 @@ namespace Tontonator.Core
         public bool IsActive { get; set; }
 		public bool QuestionsRequired { get; set; }
 
-		private bool refillNeeded = true;
-		private bool alreadySet = false;
+		private bool refillNeeded;
+		private bool alreadySet;
 
 		private Character currentCharacter = new Character();
 
@@ -67,6 +67,8 @@ namespace Tontonator.Core
 			
 			_average = 0d;
 			IsActive = true;
+			refillNeeded = true;
+			alreadySet = false;
 		}
 
 		/// <summary>
@@ -309,7 +311,7 @@ namespace Tontonator.Core
 		/// <summary>
         /// This method...
         /// </summary>
-		public void Dispose() => IsActive = false;
+		public void Dispose	() => IsActive = false;
 
 		/// <summary>
         /// Method to increase the current index that will be shown when asking a question.
@@ -317,9 +319,9 @@ namespace Tontonator.Core
         public void IncreaseCurrentIndex() => currentIndex++;
         public void DisableDatabase() => DATABASE_OFF = true;
         public void EnableDatabase() => DATABASE_OFF = false;
-		public bool CheckQuestionByName(string name) => string.IsNullOrEmpty(_questionsService.Read(nameof(Question.QuestionName), name).Id) ? false : true;
         public Question AddQuestion(Question question) => _questionsService.Add(question);
         public Question GetQuestionByName(string name) => _questionsService.Read(nameof(Question.QuestionName), name);
-        public List<Question> GetAskedQuestions() => alreadyAskedQuestions;
+		public Character AddCharacter(Character character) => _charactersService.AddCharacter(character);
+		public List<Question> GetAskedQuestions() => alreadyAskedQuestions;
     }
 }

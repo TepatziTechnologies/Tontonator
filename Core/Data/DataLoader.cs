@@ -15,7 +15,7 @@ namespace Tontonator.Core.Data
 
 		public static void InitCharacters()
 		{
-			characters.Add(new Character("El que siempre dice que si", "random", new List<Question>() {
+			characters.Add(new Character("El que siempre dice que si", CharacterCategory.Unassigned, new List<Question>() {
 				new Question("¿Su personaje es real?",QuestionCategory.Basic, QuestionOption.Si, 1),
 				new Question("¿Su personaje es hombre?", QuestionCategory.Basic, QuestionOption.Si, 1),
                 new Question("¿Su personaje es un youtuber famoso?", QuestionCategory.Character, QuestionOption.Si, 1),

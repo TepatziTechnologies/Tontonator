@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tontonator.Core.Data.BaseRepository;
+using Tontonator.Models.Enums;
 
 namespace Tontonator.Models
 {
@@ -11,7 +12,7 @@ namespace Tontonator.Models
 	{
 		public string Id { get; set; }
 		public string CharacterName { get; set; }
-		public string CharacterCategory { get; set; }
+		public CharacterCategory CharacterCategory { get; set; }
 		public List<Question> Questions { get; set; }
 		public string[] IdQuestions { get; set; }
 
@@ -20,7 +21,7 @@ namespace Tontonator.Models
 
         }
 
-		public Character(string characterName, string characterCategory, List<Question> questions)
+		public Character(string characterName, CharacterCategory characterCategory, List<Question> questions)
 		{
 			CharacterName = characterName;
 			CharacterCategory = characterCategory;

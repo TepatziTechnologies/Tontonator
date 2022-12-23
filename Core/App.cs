@@ -10,14 +10,7 @@ namespace Tontonator.Core
 {
     internal class App
     {
-        public static void Init()
-        {
-            States.ShowMainMenu();
-        }
-
-        public static void Exit()
-        {
-            Environment.Exit(0);
-        }
+        public static void Init() => States.ShowMainMenu();
+        public static void Exit() => Environment.Exit(0);
     }
 }
