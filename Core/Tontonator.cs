@@ -286,8 +286,9 @@ namespace Tontonator.Core
 				// We clear the inherited questions.
 				charactersInheritedQuestions.Clear();
 
-                // We change the character.
-                // ChangeCharacter();
+				possibleCharacters.RemoveAll(e => e.Id == currentCharacter.Id);
+
+                SetCurrentCharacter();
 			}
 
 			// We check if the amount of hits is the same as the amount of the character's question.
@@ -384,9 +385,64 @@ namespace Tontonator.Core
                         }
 					}
 				}
+
+
+
 				alreadySet = false;
 			}
-		}
+
+            // If there is any possible character on the list.
+            if (possibleCharacters.Count > 0)
+            {
+                // We iterate on them.
+                foreach (var character in possibleCharacters)
+                {
+                    // We check every current question with the character questions.
+                    foreach (var question in liveQuestions)
+                    {
+                        // If it exists then we increment hits by 1.
+                        if (character.Questions.Exists(q => q.QuestionName == question.QuestionName)) hits++;
+
+                        // If hits are equal to th
+                        if (hits == liveQuestions.Count)
+                        {
+                            // We set the character that has more hits as current.
+                            currentCharacter = character;
+
+                            // We call this method to set the questions.
+                            SetCharacterQuestions(currentCharacter);
+
+                            // We disable the database to avoid excesive calls to the database.
+                            DisableDatabase();
+
+                            // We set this value as true to let the program know it has questions to ask.
+                            alreadySet = true;
+                        }
+                        else
+                        {
+                            // If it is false.
+                            if (!alreadySet)
+                            {
+                                // We check if any possible character exist.
+                                if (possibleCharacters.Count > 0)
+                                {
+                                    // If it exist then we set the position 0 as the current.
+                                    currentCharacter = possibleCharacters[0];
+
+                                    // We disable the database to avoid excesive calls to the database.
+                                    DisableDatabase();
+
+                                    // We call this method to set the questions.
+                                    SetCharacterQuestions(currentCharacter);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                alreadySet = false;
+            }
+        }
 
 		/// <summary>
         /// Method to calculate all the possible characters.
@@ -448,15 +504,20 @@ namespace Tontonator.Core
             // We init a new list of characters.
             var list = new List<Question>();
 
-			// We iterate on the character questions.
+            // We iterate on the character questions.
             foreach (var question in character.Questions)
             {
 				// We add them to the list.
 				list.Add(new Question(question));
             }
 
-			// We set the current list on this var.
-			charactersInheritedQuestions = list;
+            foreach (var question in alreadyAskedQuestions)
+            {
+                if (list.Exists(q => q.Id == question.Id)) list.RemoveAll(q => q.Id == question.Id);
+            }
+
+            // We set the current list on this var.
+            charactersInheritedQuestions = list;
 		}
 
 		/// <summary>
